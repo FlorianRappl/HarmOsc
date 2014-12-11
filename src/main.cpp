@@ -1,8 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include "cmdparser.h"
 #include "configuration.h"
 #include "harmonic.h"
+#include "autocorrelation.h"
 
 using namespace std;
 
@@ -23,6 +25,7 @@ void parse_and_exit(CmdParser& parser) {
 }
 
 int main(int argc, char** argv) {
+	vector<double> xsquares { };
 	CmdParser cmd { 
 		argc, 
 		argv 
@@ -53,11 +56,18 @@ int main(int argc, char** argv) {
 		cerr 
 	};
 
-	sim.run(output);
+	sim.run([&output, &xsquares](int n, double x, double xsquare, double action) {
+		output << n << "\t" << x << "\t" << xsquare << "\t" << action << endl;
+		xsquares.push_back(xsquare);
+	});
 	output.close();
+
+	const auto tauInt = AutoCorrelation(xsquares).compute();
 
 	cout << "Measurements statistics ..." << endl;
 	cout << "acc  = " << sim.compute_acceptance() << endl;
 	cout << "<x>  = " << sim.compute_x() << endl;
 	cout << "<x²> = " << sim.compute_x_square() << endl;
+	cout << "<τi> = " << tauInt.mean << endl;
+	cout << "στi  = " << tauInt.uncertainty << endl;
 }
