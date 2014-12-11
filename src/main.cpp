@@ -50,10 +50,14 @@ int main(int argc, char** argv) {
 	Harmonic sim { 
 		config, 
 		cout, 
-		output, 
 		cerr 
 	};
 
-	sim.run();
+	sim.run(output);
 	output.close();
+
+	cout << "Measurements statistics ..." << endl;
+	cout << "acc  = " << sim.compute_acceptance() << endl;
+	cout << "<x>  = " << sim.compute_x() << endl;
+	cout << "<x²> = " << sim.compute_x_square() << endl;
 }
