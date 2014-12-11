@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
+#include <cmath>
 #include "cmdparser.h"
 #include "configuration.h"
 #include "harmonic.h"
@@ -17,6 +19,7 @@ void setup(CmdParser& parser) {
 	parser.set_optional<int>("m", "nmeas", 1000, "The number of steps, i.e. the number of measurements.");
 	parser.set_optional<int>("i", "ninit", 100, "The number of steps in the thermalization process.");
 	parser.set_optional<int>("s", "seed", 0, "The seed for the random number generator.");
+	parser.set_optional<bool>("h", "noconsole", false, "Deactivates terminal output during measurements.");
 }
 
 void parse_and_exit(CmdParser& parser) {
@@ -24,8 +27,24 @@ void parse_and_exit(CmdParser& parser) {
 		exit(1);
 }
 
+double compute_analytic(const Configuration& cfg) {
+	using std::sqrt;
+	using std::pow;
+
+	const auto nt = cfg.nt;
+	const auto omegasq = cfg.omega_square;
+	const auto omega = sqrt(omegasq);
+
+	const auto c = omega * sqrt(1.0 + omegasq / 4.0);
+	const auto r = 1.0 + 0.5 * omegasq - c;
+	const auto a = (1.0 + pow(r, nt)) / (1.0 - pow(r, nt));
+	const auto b = 2.0 * c;
+	return a / b;
+}
+
 int main(int argc, char** argv) {
 	vector<double> xsquares { };
+	stringstream ss { };
 	CmdParser cmd { 
 		argc, 
 		argv 
@@ -52,7 +71,7 @@ int main(int argc, char** argv) {
 
 	Harmonic sim { 
 		config, 
-		cout, 
+		cmd.get<bool>("h") ? ss : cout, 
 		cerr 
 	};
 
@@ -68,6 +87,7 @@ int main(int argc, char** argv) {
 	cout << "acc  = " << sim.compute_acceptance() << endl;
 	cout << "<x>  = " << sim.compute_x() << endl;
 	cout << "<x²> = " << sim.compute_x_square() << endl;
+	cout << "x²a  = " << compute_analytic(config) << endl;
 	cout << "<τi> = " << tauInt.mean << endl;
 	cout << "στi  = " << tauInt.uncertainty << endl;
 }
