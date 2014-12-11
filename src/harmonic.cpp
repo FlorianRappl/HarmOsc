@@ -12,10 +12,10 @@ Harmonic::Harmonic(const Configuration& cfg, std::ostream& info, std::ostream& w
 	acr(0.0) {
 }
 
-void Harmonic::run(std::ostream& data) {
+void Harmonic::run(std::function<void(int, double, double, double)> report) {
 	init();
 	thermalize();
-	measure(data);
+	measure(report);
 }
 
 void Harmonic::init() {
@@ -49,7 +49,7 @@ void Harmonic::thermalize() {
 	}
 }
 
-void Harmonic::measure(std::ostream& data) {
+void Harmonic::measure(std::function<void(int, double, double, double)> report) {
 	using std::endl;
 	info << "Starting measurements ..." << endl;
 
@@ -62,7 +62,7 @@ void Harmonic::measure(std::ostream& data) {
 		info << "acc  = " << accepted << endl;
 		info << "<x>  = " << xs << endl;
 		info << "<x²> = " << xsq << endl;
-		data << n << "\t" << xs << "\t" << xsq << "\t" << act << endl;
+		report(n, xs, xsq, act);
 		acr += accepted;
 		xsm += xs;
 		xsqm += xsq;

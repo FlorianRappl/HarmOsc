@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <functional>
 #include "configuration.h"
 #include "lattice.h"
 
@@ -7,7 +8,7 @@ class Harmonic final {
 public:
 	Harmonic(const Configuration& configuration, std::ostream& info, std::ostream& warn);
 
-	void run(std::ostream& data);
+	void run(std::function<void(int, double, double, double)> report);
 
 	double compute_acceptance() const;
 
@@ -24,7 +25,7 @@ protected:
 
 	void thermalize();
 
-	void measure(std::ostream& data);
+	void measure(std::function<void(int, double, double, double)> report);
 
 	inline double x(int n) const {
 		return lattice.x(n);
