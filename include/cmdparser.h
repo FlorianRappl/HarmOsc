@@ -306,11 +306,6 @@ public:
 		return true;
 	}
 
-	void parse_and_exit() {
-		if (parse() == false)
-			exit(1);
-	}
-
 	template<typename T>
 	T get(const std::string& name) const {
 		for (const auto command : _commands) {

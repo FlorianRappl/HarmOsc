@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "cmdparser.h"
 #include "configuration.h"
 #include "harmonic.h"
@@ -16,13 +17,25 @@ void setup(CmdParser& parser) {
 	parser.set_optional<int>("s", "seed", 0, "The seed for the random number generator.");
 }
 
-int main(int argc, char** argv) {
-	CmdParser cmd { argc, argv };
-	setup(cmd);
-	cmd.parse_and_exit();
+void parse_and_exit(CmdParser& parser) {
+	if (parser.parse() == false)
+		exit(1);
+}
 
-	const auto output = cmd.get<string>("o");
-	const auto config = Configuration {
+int main(int argc, char** argv) {
+	CmdParser cmd { 
+		argc, 
+		argv 
+	};
+
+	setup(cmd);
+	parse_and_exit(cmd);
+
+	ofstream output { 
+		cmd.get<string>("o") 
+	};
+
+	Configuration config {
 		cmd.get<int>("n"),
 		cmd.get<double>("w"),
 		cmd.get<int>("m"),
@@ -33,4 +46,14 @@ int main(int argc, char** argv) {
 	};
 
 	cout << config << endl;
+
+	Harmonic sim { 
+		config, 
+		cout, 
+		output, 
+		cerr 
+	};
+
+	sim.run();
+	output.close();
 }
