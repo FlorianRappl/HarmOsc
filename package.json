@@ -1,0 +1,25 @@
+{
+  "name": "HarmOsc",
+  "version": "1.0.0",
+  "description": "Implementation of a simulation for the harmonic oscillator on the lattice using an HMC.",
+  "main": "Jakefile",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Lattice",
+    "Harmonic",
+    "Oscillator",
+    "Physics",
+    "HMC",
+    "MonteCarlo",
+    "Hybrid",
+    "Force",
+    "Quantum"
+  ],
+  "author": "Florian Rappl",
+  "license": "GPL",
+  "devDependencies": {
+    "chalk": "^0.5.1"
+  }
+}
