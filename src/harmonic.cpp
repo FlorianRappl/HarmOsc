@@ -7,7 +7,7 @@ Harmonic::Harmonic(const Configuration& cfg, std::ostream& info, std::ostream& w
 	warn(warn),
 	rng(cfg.seed),
 	dist(0.0, 1.0),
-	lattice(cfg),
+	lattice(rng, cfg.nt, cfg.nstep, cfg.tau, cfg.omega_square, cfg.lambda),
 	xsm(0.0),
 	xsqm(0.0),
 	acr(0.0) {

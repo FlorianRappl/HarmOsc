@@ -5,20 +5,20 @@ inline int periodic(int index, int volume) noexcept {
 	return index < 0 ? (index + volume) : (index >= volume ? index - volume : index);
 }
 
-Lattice::Lattice(const Configuration& cfg) noexcept :
-	rng(cfg.seed),
+Lattice::Lattice(std::mt19937& rng, int nt, int nstep, double tau, double omegasq, double lambda) noexcept :
+	rng(rng),
 	gauss(),
-	nt(cfg.nt),
-	nstep(cfg.nstep),
-	osq(2.0 + cfg.omega_square),
-	lambda(cfg.lambda),
-	eps(cfg.tau / static_cast<double>(cfg.nstep)),
-	xv(new double[cfg.nt]),
-	xbck(new double[cfg.nt]),
-	pv(new double[cfg.nt]) {
-	const auto factor = 1.0 / sqrt(2.0 * cfg.omega_square);
+	nt(nt),
+	nstep(nstep),
+	osq(2.0 + omegasq),
+	lambda(lambda),
+	eps(tau / static_cast<double>(nstep)),
+	xv(new double[nt]),
+	xbck(new double[nt]),
+	pv(new double[nt]) {
+	const auto factor = 1.0 / sqrt(2.0 * omegasq);
 
-	for(int i = 0; i < cfg.nt; ++i)
+	for(int i = 0; i < nt; ++i)
 		xv[i] = gauss(rng) * factor;
 }
 

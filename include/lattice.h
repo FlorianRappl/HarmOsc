@@ -1,10 +1,9 @@
 #pragma once
 #include <random>
-#include "configuration.h"
 
 class Lattice final {
 public:
-	explicit Lattice(const Configuration& cfg) noexcept;
+	explicit Lattice(std::mt19937& rng, int nt, int nstep, double tau, double omegasq, double lambda) noexcept;
 
 	~Lattice() noexcept;
 
@@ -40,7 +39,7 @@ protected:
 	void integrate_p(double eps) noexcept;
 
 private:
-	std::mt19937 rng;
+	std::mt19937& rng;
 	std::normal_distribution<double> gauss;
 	int nt;
 	int nstep;
