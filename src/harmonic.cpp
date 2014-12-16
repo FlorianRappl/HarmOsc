@@ -1,7 +1,8 @@
 #include "harmonic.h"
 
 Harmonic::Harmonic(const Configuration& cfg, std::ostream& info, std::ostream& warn) : 
-	cfg(cfg),
+	ntherm(cfg.ntherm),
+	nmeas(cfg.nmeas),
 	info(info),
 	warn(warn),
 	rng(cfg.seed),
@@ -30,7 +31,7 @@ void Harmonic::thermalize() {
 	info << "Running thermalization ..." << endl;
 	auto arate = 0.0;
 
-	for (int n = 0; n < cfg.ntherm; ++n) {
+	for (int n = 0; n < ntherm; ++n) {
 		const auto accepted = step();
 		const auto xs = lattice.x_average();
 		const auto xsq = lattice.x_square_average();
@@ -43,7 +44,7 @@ void Harmonic::thermalize() {
 
 	info << "Thermalization finished!" << endl;
 
-	if (4.0 * arate < cfg.ntherm) {
+	if (4.0 * arate < ntherm) {
 		warn << "Bad acceptance rate in thermalisation!" << endl;
 		exit(1);
 	}
@@ -53,7 +54,7 @@ void Harmonic::measure(std::function<void(int, double, double, double)> report) 
 	using std::endl;
 	info << "Starting measurements ..." << endl;
 
-	for (int n = 0; n < cfg.nmeas; ++n) { 
+	for (int n = 0; n < nmeas; ++n) { 
 		const auto accepted = step();
 		const auto xs = lattice.x_average();
 		const auto xsq = lattice.x_square_average();
@@ -90,13 +91,13 @@ bool Harmonic::metropolis(double r) {
 }
 
 double Harmonic::compute_acceptance() const {
-	return acr / static_cast<double>(cfg.nmeas);
+	return acr / static_cast<double>(nmeas);
 }
 
 double Harmonic::compute_x() const {
-	return xsm / static_cast<double>(cfg.nmeas);
+	return xsm / static_cast<double>(nmeas);
 }
 
 double Harmonic::compute_x_square() const {
-	return xsqm / static_cast<double>(cfg.nmeas);
+	return xsqm / static_cast<double>(nmeas);
 }

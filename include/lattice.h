@@ -45,6 +45,7 @@ private:
 	int nt;
 	int nstep;
 	double osq;
+	double lambda;
 	double eps;
 	double* xv;
 	double* xbck;

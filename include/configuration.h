@@ -5,6 +5,7 @@ struct Configuration {
 public:
 	int nt;
 	double omega_square;
+	double lambda;
 	int nmeas;
 	int ntherm;
 	double tau;
@@ -16,6 +17,7 @@ public:
 
 		os << "Nt    = " << config.nt << endl;
 		os << "ω²    = " << config.omega_square << endl;
+		os << "λ     = " << config.lambda << endl;
 		os << "Nmeas = " << config.nmeas << endl;
 		os << "Nterm = " << config.ntherm << endl;
 		os << "τ     = " << config.tau << endl;

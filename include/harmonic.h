@@ -27,16 +27,9 @@ protected:
 
 	void measure(std::function<void(int, double, double, double)> report);
 
-	inline double x(int n) const {
-		return lattice.x(n);
-	}
-
-	inline double p(int n) const {
-		return lattice.p(n);
-	}
-
 private:
-	Configuration cfg;
+	int ntherm;
+	int nmeas;
 	std::ostream& info;
 	std::ostream& warn;
 	std::mt19937 rng;

@@ -11,6 +11,7 @@ Lattice::Lattice(const Configuration& cfg) :
 	nt(cfg.nt),
 	nstep(cfg.nstep),
 	osq(2.0 + cfg.omega_square),
+	lambda(cfg.lambda),
 	eps(cfg.tau / static_cast<double>(cfg.nstep)),
 	xv(new double[cfg.nt]),
 	xbck(new double[cfg.nt]),
@@ -58,7 +59,7 @@ void Lattice::randomize() {
 }
 
 double Lattice::force(int n) const {
-	return osq * x(n) - x(n - 1) - x(n + 1);
+	return osq * x(n) - x(n - 1) - x(n + 1) + 4.0 * lambda * pow(x(n), 3);
 }
 
 void Lattice::integrate_x(double eps) {
@@ -89,7 +90,7 @@ double Lattice::hamilton() const {
 
 	for(int i = 0; i < nt; ++i) {
 		sum += pow(p(i), 2);
-		sum += osq * pow(x(i), 2);
+		sum += osq * pow(x(i), 2) + 2.0 * lambda * pow(x(i), 4);
 		sum -= x(i) * (x(i - 1) + x(i + 1));
 	}
 
@@ -119,7 +120,7 @@ double Lattice::action_average() const {
 	auto sum = 0.0;
 
 	for (int i = 0; i < nt; ++i) {
-		sum += osq * pow(x(i), 2);
+		sum += osq * pow(x(i), 2) + 2.0 * lambda * pow(x(i), 4);
 		sum -= x(i) * (x(i - 1) + x(i + 1));
 	}
 
