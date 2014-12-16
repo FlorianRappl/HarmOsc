@@ -4,17 +4,17 @@
 
 using std::size_t;
 
-int abs(int number) {
+int abs(int number) noexcept {
 	return number >= 0 ? number : -number;
 }
 
-AutoCorrelation::AutoCorrelation(const std::vector<double>& elements, int lambda) :
+AutoCorrelation::AutoCorrelation(const std::vector<double>& elements, int lambda) noexcept :
 	elements(elements),
 	lambda(lambda),
 	avg(average()) {
 }
 
-double AutoCorrelation::average() const {
+double AutoCorrelation::average() const noexcept {
 	const auto n = elements.size();
 	auto sum = 0.0;
 
@@ -24,7 +24,7 @@ double AutoCorrelation::average() const {
 	return sum / static_cast<double>(n);
 }
 
-Observable<double> AutoCorrelation::compute() const {
+Observable<double> AutoCorrelation::compute() const noexcept {
 	using std::sqrt;
 
 	const auto n = elements.size();
@@ -54,7 +54,7 @@ Observable<double> AutoCorrelation::compute() const {
 	return Observable<double> { tau, sigma };
 }
 
-double AutoCorrelation::sigma0() const {
+double AutoCorrelation::sigma() const noexcept {
 	using std::sqrt;
 	using std::pow;
 
@@ -68,12 +68,12 @@ double AutoCorrelation::sigma0() const {
 	return sqrt(var / (xn * (xn - 1.0)));
 }
 
-double AutoCorrelation::auto_corr(int tmax, double* g) const {
+double AutoCorrelation::auto_corr(int tmax, double* g) const noexcept {
 	using std::abs;
 	using std::numeric_limits;
 
 	const auto n = elements.size();
-	auto g0 = sigma0();
+	auto g0 = sigma();
 
 	if (g0 <= (10.0 * numeric_limits<double>::epsilon() * abs(avg))) {
 		g0 = 0.0;
@@ -97,7 +97,7 @@ double AutoCorrelation::auto_corr(int tmax, double* g) const {
 	return g0;
 }
 
-void AutoCorrelation::sigma_corr(int tmax, double *g, double *eg) const {
+void AutoCorrelation::sigma_corr(int tmax, double *g, double *eg) const noexcept {
 	using std::sqrt;
 	using std::pow;
 

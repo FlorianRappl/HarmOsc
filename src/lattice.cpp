@@ -1,11 +1,11 @@
 #include "lattice.h"
 #include <cmath>
 
-inline int periodic(int index, int volume) {
+inline int periodic(int index, int volume) noexcept {
 	return index < 0 ? (index + volume) : (index >= volume ? index - volume : index);
 }
 
-Lattice::Lattice(const Configuration& cfg) :
+Lattice::Lattice(const Configuration& cfg) noexcept :
 	rng(cfg.seed),
 	gauss(),
 	nt(cfg.nt),
@@ -22,57 +22,57 @@ Lattice::Lattice(const Configuration& cfg) :
 		xv[i] = gauss(rng) * factor;
 }
 
-Lattice::~Lattice() {
+Lattice::~Lattice() noexcept {
 	delete[] xv;
 	delete[] pv;
 }
 
-double Lattice::x(int index) const {
+double Lattice::x(int index) const noexcept {
 	return xv[periodic(index, nt)];
 }
 
-double Lattice::p(int index) const {
+double Lattice::p(int index) const noexcept {
 	return pv[periodic(index, nt)];
 }
 
-void Lattice::x(int index, double value) {
+void Lattice::x(int index, double value) noexcept {
 	xv[periodic(index, nt)] = value;
 }
 
-void Lattice::p(int index, double value) {
+void Lattice::p(int index, double value) noexcept {
 	pv[periodic(index, nt)] = value;
 }
 
-void Lattice::store() {
+void Lattice::store() noexcept {
 	for (int i = 0; i < nt; ++i)
 		xbck[i] = xv[i];
 }
 
-void Lattice::restore() {
+void Lattice::restore() noexcept {
 	for (int i = 0; i < nt; ++i)
 		xv[i] = xbck[i];
 }
 
-void Lattice::randomize() {
+void Lattice::randomize() noexcept {
 	for (int i = 0; i < nt; ++i)
 		pv[i] = gauss(rng);
 }
 
-double Lattice::force(int n) const {
+double Lattice::force(int n) const noexcept {
 	return osq * x(n) - x(n - 1) - x(n + 1) + 4.0 * lambda * pow(x(n), 3);
 }
 
-void Lattice::integrate_x(double eps) {
+void Lattice::integrate_x(double eps) noexcept {
 	for (int i = 0; i < nt; ++i)
 		xv[i] += eps * pv[i];
 }
 
-void Lattice::integrate_p(double eps) {
+void Lattice::integrate_p(double eps) noexcept {
 	for (int i = 0; i < nt; ++i)
 		pv[i] -= eps * force(i);
 }
 
-void Lattice::integrate() {
+void Lattice::integrate() noexcept {
 	integrate_x(eps * 0.5);
 	integrate_p(eps);
 
@@ -84,7 +84,7 @@ void Lattice::integrate() {
 	integrate_x(eps * 0.5);
 }
 
-double Lattice::hamilton() const {
+double Lattice::hamilton() const noexcept {
 	using std::pow;
 	auto sum = 0.0;
 
@@ -97,7 +97,7 @@ double Lattice::hamilton() const {
 	return 0.5 * sum;
 }
 
-double Lattice::x_average() const {
+double Lattice::x_average() const noexcept {
 	auto sum = 0.0;
 
 	for (int i = 0; i < nt; ++i)
@@ -106,7 +106,7 @@ double Lattice::x_average() const {
 	return sum / static_cast<double>(nt);
 }
 
-double Lattice::x_square_average() const {
+double Lattice::x_square_average() const noexcept {
 	auto sum = 0.0;
 
 	for (int i = 0; i < nt; ++i)
@@ -115,7 +115,7 @@ double Lattice::x_square_average() const {
 	return sum / static_cast<double>(nt);
 }
 
-double Lattice::action_average() const {
+double Lattice::action_average() const noexcept {
 	using std::pow;
 	auto sum = 0.0;
 

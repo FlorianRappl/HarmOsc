@@ -9,18 +9,18 @@ struct Observable {
 
 class AutoCorrelation final {
 public:
-	AutoCorrelation(const std::vector<double>& elements, int lambda = 100);
+	AutoCorrelation(const std::vector<double>& elements, int lambda = 100) noexcept;
 
-	Observable<double> compute() const;
+	Observable<double> compute() const noexcept;
 
 protected:
-	double average() const;
+	double average() const noexcept;
 
-	double sigma0() const;
+	double sigma() const noexcept;
 
-	void sigma_corr(int tmax, double *g, double *eg) const;
+	void sigma_corr(int tmax, double *g, double *eg) const noexcept;
 
-	double auto_corr(int tmax, double* g) const;
+	double auto_corr(int tmax, double* g) const noexcept;
 
 private:
 	std::vector<double> elements;

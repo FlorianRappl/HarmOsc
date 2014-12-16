@@ -6,26 +6,26 @@
 
 class Harmonic final {
 public:
-	Harmonic(const Configuration& configuration, std::ostream& info, std::ostream& warn);
+	Harmonic(const Configuration& configuration, std::ostream& info, std::ostream& warn) noexcept;
 
-	void run(std::function<void(int, double, double, double)> report);
+	void run(std::function<void(int, double, double, double)> report) noexcept;
 
-	double compute_acceptance() const;
+	double compute_acceptance() const noexcept;
 
-	double compute_x() const;
+	double compute_x() const noexcept;
 
-	double compute_x_square() const;
+	double compute_x_square() const noexcept;
 
 protected:
-	bool metropolis(double r);
+	bool metropolis(double r) noexcept;
 
-	bool step();
+	bool step() noexcept;
 
-	void init();
+	void init() noexcept;
 
-	void thermalize();
+	void thermalize() noexcept;
 
-	void measure(std::function<void(int, double, double, double)> report);
+	void measure(std::function<void(int, double, double, double)> report) noexcept;
 
 private:
 	int ntherm;

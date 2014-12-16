@@ -4,40 +4,40 @@
 
 class Lattice final {
 public:
-	explicit Lattice(const Configuration& cfg);
+	explicit Lattice(const Configuration& cfg) noexcept;
 
-	~Lattice();
+	~Lattice() noexcept;
 
-	double x(int index) const;
+	double x(int index) const noexcept;
 
-	double p(int index) const;
+	double p(int index) const noexcept;
 
-	void x(int index, double value);
+	void x(int index, double value) noexcept;
 
-	void p(int index, double value);
+	void p(int index, double value) noexcept;
 
-	void store();
+	void store() noexcept;
 
-	void restore();
+	void restore() noexcept;
 
-	void randomize();
+	void randomize() noexcept;
 
-	void integrate();
+	void integrate() noexcept;
 
-	double hamilton() const;
+	double hamilton() const noexcept;
 
-	double x_average() const;
+	double x_average() const noexcept;
 
-	double x_square_average() const;
+	double x_square_average() const noexcept;
 
-	double action_average() const;
+	double action_average() const noexcept;
 
 protected:
-	double force(int n) const;
+	double force(int n) const noexcept;
 
-	void integrate_x(double eps);
+	void integrate_x(double eps) noexcept;
 
-	void integrate_p(double eps);
+	void integrate_p(double eps) noexcept;
 
 private:
 	std::mt19937 rng;
