@@ -20,7 +20,7 @@ void setup(CmdParser& parser) {
 	parser.set_optional<int>("m", "nmeas", 1000, "The number of steps, i.e. the number of measurements.");
 	parser.set_optional<int>("i", "ninit", 100, "The number of steps in the thermalization process.");
 	parser.set_optional<int>("s", "seed", 0, "The seed for the random number generator.");
-	parser.set_optional<bool>("h", "noconsole", false, "Deactivates terminal output during measurements.");
+	parser.set_optional<bool>("@", "noconsole", false, "Deactivates terminal output during measurements.");
 }
 
 void parse_and_exit(CmdParser& parser) {
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 
 	Harmonic sim { 
 		config, 
-		cmd.get<bool>("h") ? ss : cout, 
+		cmd.get<bool>("@") ? ss : cout, 
 		cerr 
 	};
 

@@ -24,6 +24,7 @@ Lattice::Lattice(const Configuration& cfg) noexcept :
 
 Lattice::~Lattice() noexcept {
 	delete[] xv;
+	delete[] xbck;
 	delete[] pv;
 }
 
