@@ -1,6 +1,6 @@
 # Harmonic Oscillator
 
-This is very simple HMC sample, to simulate the harmonic oscillator on the lattice. The code is written in C++11 and does not have any external dependencies. The lattice uses periodic boundary conditions.
+This is very simple HMC sample, to simulate the harmonic oscillator on the lattice. The code is written in C++11 and does not have any external dependencies. The lattice uses periodic boundary conditions. To avoid dependencies mostly algorithms and data structures from STL have been used. This includes the C++11 random number generators with the associated distributions (such as normal and uniform distributions).
 
 ## Building
 
