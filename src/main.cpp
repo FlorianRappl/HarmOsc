@@ -9,6 +9,7 @@
 #include "autocorrelation.h"
 
 using namespace std;
+using namespace physics;
 
 void setup(CmdParser& parser) {
 	parser.set_optional<string>("o", "output", "data.out", "Name of the file that will be used for output.");
@@ -44,6 +45,16 @@ double compute_analytic(const Configuration& cfg) {
 	const auto a = (1.0 + pow(r, nt)) / (1.0 - pow(r, nt));
 	const auto b = 2.0 * c;
 	return a / b;
+}
+
+void print_result(const statistics::Observable<double>& tau, double analytic_result, const Harmonic& sim) {
+	cout << "Measurements statistics ..." << endl;
+	cout << "acc  = " << sim.compute_acceptance() << endl;
+	cout << "<x>  = " << sim.compute_x() << endl;
+	cout << "<x²> = " << sim.compute_x_square() << endl;
+	cout << "x²a  = " << analytic_result << endl;
+	cout << "<τi> = " << tau.mean << endl;
+	cout << "στi  = " << tau.uncertainty << endl;
 }
 
 int main(int argc, char** argv) {
@@ -86,13 +97,5 @@ int main(int argc, char** argv) {
 	});
 	output.close();
 
-	const auto tauInt = AutoCorrelation(xsquares).compute();
-
-	cout << "Measurements statistics ..." << endl;
-	cout << "acc  = " << sim.compute_acceptance() << endl;
-	cout << "<x>  = " << sim.compute_x() << endl;
-	cout << "<x²> = " << sim.compute_x_square() << endl;
-	cout << "x²a  = " << compute_analytic(config) << endl;
-	cout << "<τi> = " << tauInt.mean << endl;
-	cout << "στi  = " << tauInt.uncertainty << endl;
+	print_result(statistics::AutoCorrelation(xsquares).compute(), compute_analytic(config), sim);
 }
