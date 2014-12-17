@@ -25,6 +25,9 @@
 #include <sstream>
 #include <functional>
 
+/**
+* A simple command line parser.
+*/
 class CmdParser {
 private:
 	class CmdBase {

@@ -21,6 +21,9 @@
 #include <iostream>
 
 namespace physics {
+	/**
+	* DTO structure to carry basic configuration information.
+	*/
 	struct Configuration {
 	public:
 		int nt;
