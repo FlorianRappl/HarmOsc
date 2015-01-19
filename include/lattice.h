@@ -47,7 +47,7 @@ namespace physics {
 		* Gets the value at the specified site.
 		* 
 		* @param The index of the site.
-		* @result The value of x_i.
+		* @return The value of x_i.
 		*/
 		double x(int index) const noexcept;
 
@@ -55,7 +55,7 @@ namespace physics {
 		* Gets the momentum at the specified site.
 		* 
 		* @param The index of the site.
-		* @result The value of p_i.
+		* @return The value of p_i.
 		*/
 		double p(int index) const noexcept;
 
@@ -98,28 +98,28 @@ namespace physics {
 		/**
 		* Computes the value of the Hamilton operator.
 		* 
-		* @result The value of H, which is p²/2m + L.
+		* @return The value of H, which is p²/2m + L.
 		*/
 		double hamilton() const noexcept;
 
 		/**
 		* Gets the average value of the sites.
 		* 
-		* @result The value averaged over all sites.
+		* @return The value averaged over all sites.
 		*/
 		double x_average() const noexcept;
 
 		/**
 		* Gets the average squared value of the sites.
 		* 
-		* @result The value over all sites.
+		* @return The value over all sites.
 		*/
 		double x_square_average() const noexcept;
 
 		/**
 		* Gets the average value of the action over all sites.
 		* 
-		* @result The average action value.
+		* @return The average action value.
 		*/
 		double action_average() const noexcept;
 
@@ -128,7 +128,7 @@ namespace physics {
 		* Calculates the force at a specific site.
 		* 
 		* @param The index of the site.
-		* @result The value of the force at the given site.
+		* @return The value of the force at the given site.
 		*/
 		double force(int n) const noexcept;
 

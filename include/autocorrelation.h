@@ -47,7 +47,7 @@ namespace statistics {
 		/**
 		* Computes an observable that contains the statistics information.
 		*
-		* @result A structure consisting of mean and uncertainty information.
+		* @return A structure consisting of mean and uncertainty information.
 		*/
 		Observable<double> compute() const noexcept;
 
@@ -55,14 +55,14 @@ namespace statistics {
 		/**
 		* Computes the average over all elements.
 		*
-		* @result A number representing the average.
+		* @return A number representing the average.
 		*/
 		double average() const noexcept;
 
 		/**
 		* Computes the standard deviation over all elements.
 		*
-		* @result A number representing the std. deviation.
+		* @return A number representing the std. deviation.
 		*/
 		double sigma() const noexcept;
 
@@ -80,7 +80,7 @@ namespace statistics {
 		*
 		* @param The number of elements to consider at maximum.
 		* @param The target where all autocorrelation values are stored.
-		* @result The integrated autocorrelation value.
+		* @return The integrated autocorrelation value.
 		*/
 		double auto_corr(int tmax, double* result) const noexcept;
 

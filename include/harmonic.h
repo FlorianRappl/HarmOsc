@@ -48,21 +48,21 @@ namespace physics {
 		/**
 		* Gets the current acceptance rate.
 		*
-		* @result The current acceptance rate.
+		* @return The current acceptance rate.
 		*/
 		double compute_acceptance() const noexcept;
 
 		/**
 		* Gets the current average x values.
 		*
-		* @result The average x values.
+		* @return The average x values.
 		*/
 		double compute_x() const noexcept;
 
 		/**
 		* Gets the current average squared x values.
 		*
-		* @result The average squared x values.
+		* @return The average squared x values.
 		*/
 		double compute_x_square() const noexcept;
 
@@ -71,14 +71,14 @@ namespace physics {
 		* Determines if the given delta should be accepted.
 		*
 		* @param The delta of the action (new - old).
-		* @result True if the change should be accepted, otherwise false.
+		* @return True if the change should be accepted, otherwise false.
 		*/
 		bool metropolis(double r) noexcept;
 
 		/**
 		* Runs a single update step.
 		*
-		* @result True if the change has been accepted, otherwise false.
+		* @return True if the change has been accepted, otherwise false.
 		*/
 		bool step() noexcept;
 
