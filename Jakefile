@@ -43,46 +43,49 @@ var targets = {
 	release: [outputDirectory, targetDirectories.release, applicationName].toPath()
 };
 
-var getTargetFileNames = function(targetDirectory) {
-	return function(fileName) {
-		var subDirectory = [objectDirectory, targetDirectory].toPath();
-		return fileName.replace(sourceDirectory, subDirectory).replace('.cpp', '.o');
-	};
-};
-var getSourceFileName = function(fileName) {
-	var index = fileName.lastIndexOf('/');
-	return sourceDirectory + fileName.substr(index).replace('.o', '.cpp');
-};
-var link = function(target, objs, compiler, flags, callback) {
-	var sources = objs.toCommand();
-	var cmd = [compiler, flags, '-o', target, sources, options, libs].toCommand();
-	jake.exec(cmd, callback);
-};
-var strip = function(name, callback) {
-	var cmd = ['strip', name].toCommand();
-	jake.exec(cmd, callback);
-};
-var compile = function(name, source, compiler, flags, optimizationLevel, callback) {
-	var includes = ['-c', '-I', includeDirectory].toCommand();
-	var locals = [defines].toCommand();
-	var cmd = [compiler, flags, includes, '-o', name, source, options, optimizationLevel, locals].toCommand();
-	jake.exec(cmd, callback);
-};
-var remove = function(name) {
-	var cmd = ['rm', '-rf', name].toCommand();
-	jake.exec(cmd);
-};
 var info = function(sender, message) {
 	jake.logger.log(['[', chalk.green(sender), '] ', chalk.gray(message)].toMessage());
 };
 var warn = function(sender, message) {
 	jake.logger.log(['[', chalk.red(sender), '] ', chalk.gray(message)].toMessage());
 };
+var targetFileNames = function(targetDirectory) {
+	return function(fileName) {
+		var subDirectory = [objectDirectory, targetDirectory].toPath();
+		return fileName.replace(sourceDirectory, subDirectory).replace('.cpp', '.o');
+	};
+};
+var sourceFileName = function(fileName) {
+	var index = fileName.lastIndexOf('/');
+	return sourceDirectory + fileName.substr(index).replace('.o', '.cpp');
+};
+var link = function(target, objs, compiler, flags, callback) {
+	var sources = objs.toCommand();
+	var cmd = [compiler, flags, '-o', target, sources, options, libs].toCommand();
+	info(compiler, 'Linking ' + chalk.magenta(target) + ' ...');
+	jake.exec(cmd, callback);
+};
+var strip = function(name, callback) {
+	var cmd = ['strip', name].toCommand();
+	info('strip', 'Removing symbols from ' + chalk.magenta(name) + ' ...');
+	jake.exec(cmd, callback);
+};
+var compile = function(name, source, compiler, flags, optimizationLevel, callback) {
+	var includes = ['-c', '-I', includeDirectory].toCommand();
+	var locals = [defines].toCommand();
+	var cmd = [compiler, flags, includes, '-o', name, source, options, optimizationLevel, locals].toCommand();
+	info(compiler, 'Compiling ' + chalk.magenta(source) + ' ...');
+	jake.exec(cmd, callback);
+};
+var remove = function(name) {
+	var cmd = ['rm', '-rf', name].toCommand();
+	jake.exec(cmd);
+};
 var ruleCreator = function(r) {
 	var condition = new RegExp('/' + r.source + '/.+' + '\\.o$');
 	var destination = r.target.substr(0, r.target.lastIndexOf('/'));
 
-	rule(condition, getSourceFileName, isAsync, function() {
+	rule(condition, sourceFileName, isAsync, function() {
 		jake.mkdirP([objectDirectory, r.source].toPath());
 		var name = this.name;
 		var source = this.source;
@@ -106,14 +109,14 @@ var rules = [{
 	flags: cflags,
 	compiler: cc,
 	target: targets.debug,
-	objects: files.toArray().map(getTargetFileNames(targetDirectories.debug))
+	objects: files.toArray().map(targetFileNames(targetDirectories.debug))
 },{
 	source: [targetDirectories.release].toPath(), 
 	optimization: '-O2', 
 	flags: cflags,
 	compiler: cc,
 	target: targets.release, 
-	objects: files.toArray().map(getTargetFileNames(targetDirectories.release))
+	objects: files.toArray().map(targetFileNames(targetDirectories.release))
 }];
 
 rules.forEach(ruleCreator);
@@ -139,7 +142,7 @@ task('debug', [targets.debug], function(params) {
 desc('Creates a release version of the application');
 task('release', [targets.release], isAsync, function(params) {
 	strip(targets.release, function() {
-		info('release', 'Removed symbols from ' + targets.release + '.');
+		info('release', 'Removed symbols from ' + chalk.magenta(targets.release) + '.');
 		info('release', 'Everything done!');
 		complete();
 	});
