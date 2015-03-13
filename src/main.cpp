@@ -29,6 +29,7 @@
 
 using namespace std;
 using namespace physics;
+using namespace statistics;
 
 void setup(CmdParser& parser) {
 	parser.set_optional<string>("o", "output", "data.out", "Name of the file that will be used for output.");
@@ -66,7 +67,7 @@ double compute_analytic(const Configuration& cfg) {
 	return a / b;
 }
 
-void print_result(const statistics::Observable<double>& tau, double analytic_result, const Harmonic& sim) {
+void print_result(const Observable<double>& tau, double analytic_result, const Harmonic& sim) {
 	cout << "Measurements statistics ..." << endl;
 	cout << "acc  = " << sim.compute_acceptance() << endl;
 	cout << "<x>  = " << sim.compute_x() << endl;
@@ -79,10 +80,7 @@ void print_result(const statistics::Observable<double>& tau, double analytic_res
 int main(int argc, char** argv) {
 	vector<double> xsquares { };
 	stringstream ss { };
-	CmdParser cmd { 
-		argc, 
-		argv 
-	};
+	CmdParser cmd { argc, argv };
 
 	setup(cmd);
 	parse_and_exit(cmd);
@@ -114,7 +112,7 @@ int main(int argc, char** argv) {
 		output << n << "\t" << x << "\t" << xsquare << "\t" << action << endl;
 		xsquares.push_back(xsquare);
 	});
-	output.close();
 
-	print_result(statistics::AutoCorrelation(xsquares).compute(), compute_analytic(config), sim);
+	output.close();
+	print_result(AutoCorrelation(xsquares).compute(), compute_analytic(config), sim);
 }
