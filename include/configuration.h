@@ -26,13 +26,37 @@ namespace physics {
 	*/
 	struct Configuration {
 	public:
+		/**
+		* The number of sites.
+		*/
 		int nt;
+		/**
+		* The square of the resonance frequency.
+		*/
 		double omega_square;
+		/**
+		* The anharmonic coupling.
+		*/
 		double lambda;
+		/**
+		* The number of measurements.
+		*/
 		int nmeas;
+		/**
+		* The number of thermalization steps.
+		*/
 		int ntherm;
+		/**
+		* The integration length.
+		*/
 		double tau;
+		/**
+		* The number of integration steps.
+		*/
 		int nstep;
+		/**
+		* The seed for the random number generator.
+		*/
 		int seed;
 
 		friend std::ostream& operator <<(std::ostream& os, const Configuration& config) {
